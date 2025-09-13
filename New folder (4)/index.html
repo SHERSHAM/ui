@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Underwater Ocean Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="api.js"></script>
+</head>
+<body>
+    <div class="underwater-world">
+        <!-- Underwater Background Layers -->
+        <div class="water-layer water-layer-1"></div>
+        <div class="water-layer water-layer-2"></div>
+        <div class="water-layer water-layer-3"></div>
+        
+        <!-- Floating Bubbles -->
+        <div class="bubble-container">
+            <div class="bubble bubble-1"></div>
+            <div class="bubble bubble-2"></div>
+            <div class="bubble bubble-3"></div>
+            <div class="bubble bubble-4"></div>
+            <div class="bubble bubble-5"></div>
+            <div class="bubble bubble-6"></div>
+            <div class="bubble bubble-7"></div>
+            <div class="bubble bubble-8"></div>
+            <div class="bubble bubble-9"></div>
+            <div class="bubble bubble-10"></div>
+        </div>
+
+        <!-- Beautiful CSS Fish -->
+        <div class="fish fish--a small" aria-hidden="true">
+            <svg viewBox="0 0 220 120" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <!-- body -->
+                <defs>
+                    <linearGradient id="g1" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#ffb447"/>
+                        <stop offset="100%" stop-color="#ff6a3d"/>
+                    </linearGradient>
+                    <filter id="blur1" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="0.6" />
+                    </filter>
+                </defs>
+                <ellipse cx="92" cy="60" rx="62" ry="34" fill="url(#g1)" />
+                <!-- tail -->
+                <g class="tail">
+                    <path d="M 152 60 C 180 40, 190 20, 210 40 C 190 62, 180 84, 152 66 Z" fill="#ff7a50" stroke="#e85a31" stroke-width="1" opacity="0.95"/>
+                </g>
+                <!-- eye -->
+                <circle cx="64" cy="50" r="7" fill="#fff" />
+                <circle cx="66" cy="50" r="3.5" fill="#233" />
+                <!-- highlight -->
+                <ellipse cx="74" cy="38" rx="10" ry="5" fill="rgba(255,255,255,0.22)" />
+            </svg>
+            <div class="bubble"></div>
+            <div class="bubble small"></div>
+        </div>
+
+        <!-- Fish B: Blue -->
+        <div class="fish fish--b tiny" aria-hidden="true">
+            <svg viewBox="0 0 220 120" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g2" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#4fc3f7"/>
+                        <stop offset="100%" stop-color="#2a9ad6"/>
+                    </linearGradient>
+                </defs>
+                <ellipse cx="90" cy="60" rx="58" ry="32" fill="url(#g2)"/>
+                <g class="tail">
+                    <path d="M148 62 C 170 44, 182 28, 202 46 C 184 66, 168 88, 148 70 Z" fill="#3aa9df" stroke="#1f77a2" stroke-width="0.9"/>
+                </g>
+                <circle cx="62" cy="50" r="6" fill="#fff" />
+                <circle cx="64" cy="50" r="3" fill="#052430" />
+            </svg>
+            <div class="bubble small"></div>
+        </div>
+
+        <!-- Fish C: Green -->
+        <div class="fish fish--c" aria-hidden="true">
+            <svg viewBox="0 0 260 140" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g3" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#8fe07b"/>
+                        <stop offset="100%" stop-color="#39c06a"/>
+                    </linearGradient>
+                </defs>
+                <ellipse cx="110" cy="68" rx="72" ry="40" fill="url(#g3)"/>
+                <g class="tail">
+                    <path d="M188 68 C 214 46, 222 30, 246 48 C 220 78, 206 98, 188 78 Z" fill="#56c57a" stroke="#2d9a57" stroke-width="1"/>
+                </g>
+                <circle cx="84" cy="56" r="7" fill="#fff" />
+                <circle cx="86" cy="56" r="3.6" fill="#06321e" />
+            </svg>
+        </div>
+
+        <!-- Fish D: Purple -->
+        <div class="fish fish--d tiny" aria-hidden="true">
+            <svg viewBox="0 0 220 120" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g4" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#b88cff"/>
+                        <stop offset="100%" stop-color="#8a4dd6"/>
+                    </linearGradient>
+                </defs>
+                <ellipse cx="92" cy="60" rx="58" ry="32" fill="url(#g4)"/>
+                <g class="tail">
+                    <path d="M148 62 C 170 44, 182 28, 202 46 C 184 66, 168 88, 148 70 Z" fill="#a06af0" stroke="#7a34c8" stroke-width="0.9"/>
+                </g>
+                <circle cx="64" cy="50" r="6.5" fill="#fff" />
+                <circle cx="66" cy="50" r="3" fill="#1b0836" />
+            </svg>
+            <div class="bubble tiny"></div>
+        </div>
+
+        <!-- Fish E: Yellow small -->
+        <div class="fish fish--e small" aria-hidden="true">
+            <svg viewBox="0 0 220 120" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g5" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#ffd86b"/>
+                        <stop offset="100%" stop-color="#ffbb33"/>
+                    </linearGradient>
+                </defs>
+                <ellipse cx="92" cy="60" rx="62" ry="34" fill="url(#g5)" />
+                <g class="tail">
+                    <path d="M152 60 C 180 40, 190 20, 210 40 C 190 62, 180 84, 152 66 Z" fill="#ffc04a" stroke="#e89a1d" stroke-width="1" opacity="0.98"/>
+                </g>
+                <circle cx="64" cy="50" r="7" fill="#fff" />
+                <circle cx="66" cy="50" r="3.5" fill="#1e1a0e" />
+            </svg>
+        </div>
+
+        <!-- Fish F: Pink -->
+        <div class="fish fish--f tiny" aria-hidden="true">
+            <svg viewBox="0 0 220 120" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g6" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#ff9ec7"/>
+                        <stop offset="100%" stop-color="#ff6bb3"/>
+                    </linearGradient>
+                </defs>
+                <ellipse cx="90" cy="60" rx="58" ry="32" fill="url(#g6)"/>
+                <g class="tail">
+                    <path d="M148 62 C 170 44, 182 28, 202 46 C 184 66, 168 88, 148 70 Z" fill="#ff7bb8" stroke="#e55a9a" stroke-width="0.9"/>
+                </g>
+                <circle cx="62" cy="50" r="6" fill="#fff" />
+                <circle cx="64" cy="50" r="3" fill="#2d0a1a" />
+            </svg>
+            <div class="bubble small"></div>
+        </div>
+
+        <!-- Fish G: Cyan -->
+        <div class="fish fish--g small" aria-hidden="true">
+            <svg viewBox="0 0 220 120" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g7" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#00e5ff"/>
+                        <stop offset="100%" stop-color="#00bcd4"/>
+                    </linearGradient>
+                </defs>
+                <ellipse cx="92" cy="60" rx="62" ry="34" fill="url(#g7)" />
+                <g class="tail">
+                    <path d="M152 60 C 180 40, 190 20, 210 40 C 190 62, 180 84, 152 66 Z" fill="#00d4e6" stroke="#00acc1" stroke-width="1" opacity="0.95"/>
+                </g>
+                <circle cx="64" cy="50" r="7" fill="#fff" />
+                <circle cx="66" cy="50" r="3.5" fill="#003d47" />
+            </svg>
+            <div class="bubble"></div>
+            </div>
+
+        <!-- Fish H: Coral -->
+        <div class="fish fish--h tiny" aria-hidden="true">
+            <svg viewBox="0 0 220 120" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g8" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#ff7043"/>
+                        <stop offset="100%" stop-color="#ff5722"/>
+                    </linearGradient>
+                </defs>
+                <ellipse cx="90" cy="60" rx="58" ry="32" fill="url(#g8)"/>
+                <g class="tail">
+                    <path d="M148 62 C 170 44, 182 28, 202 46 C 184 66, 168 88, 148 70 Z" fill="#ff5722" stroke="#e64a19" stroke-width="0.9"/>
+                </g>
+                <circle cx="62" cy="50" r="6" fill="#fff" />
+                <circle cx="64" cy="50" r="3" fill="#1a0a05" />
+            </svg>
+            </div>
+
+        <!-- Fish I: Lime -->
+        <div class="fish fish--i small" aria-hidden="true">
+            <svg viewBox="0 0 220 120" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g9" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#c6ff00"/>
+                        <stop offset="100%" stop-color="#aeea00"/>
+                    </linearGradient>
+                </defs>
+                <ellipse cx="92" cy="60" rx="62" ry="34" fill="url(#g9)" />
+                <g class="tail">
+                    <path d="M152 60 C 180 40, 190 20, 210 40 C 190 62, 180 84, 152 66 Z" fill="#b8e600" stroke="#9ccc65" stroke-width="1" opacity="0.95"/>
+                </g>
+                <circle cx="64" cy="50" r="7" fill="#fff" />
+                <circle cx="66" cy="50" r="3.5" fill="#2e3a0a" />
+            </svg>
+            <div class="bubble tiny"></div>
+            </div>
+
+        <!-- Fish J: Indigo -->
+        <div class="fish fish--j tiny" aria-hidden="true">
+            <svg viewBox="0 0 220 120" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g10" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#3f51b5"/>
+                        <stop offset="100%" stop-color="#303f9f"/>
+                    </linearGradient>
+                </defs>
+                <ellipse cx="90" cy="60" rx="58" ry="32" fill="url(#g10)"/>
+                <g class="tail">
+                    <path d="M148 62 C 170 44, 182 28, 202 46 C 184 66, 168 88, 148 70 Z" fill="#3949ab" stroke="#283593" stroke-width="0.9"/>
+                </g>
+                <circle cx="62" cy="50" r="6" fill="#fff" />
+                <circle cx="64" cy="50" r="3" fill="#0a0e2a" />
+            </svg>
+            <div class="bubble small"></div>
+            </div>
+
+        <!-- Fish K: Teal -->
+        <div class="fish fish--k small" aria-hidden="true">
+            <svg viewBox="0 0 220 120" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g11" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#26a69a"/>
+                        <stop offset="100%" stop-color="#00695c"/>
+                    </linearGradient>
+                </defs>
+                <ellipse cx="92" cy="60" rx="62" ry="34" fill="url(#g11)" />
+                <g class="tail">
+                    <path d="M152 60 C 180 40, 190 20, 210 40 C 190 62, 180 84, 152 66 Z" fill="#00897b" stroke="#004d40" stroke-width="1" opacity="0.95"/>
+                </g>
+                <circle cx="64" cy="50" r="7" fill="#fff" />
+                <circle cx="66" cy="50" r="3.5" fill="#001a16" />
+            </svg>
+            </div>
+
+        <!-- Fish L: Amber -->
+        <div class="fish fish--l tiny" aria-hidden="true">
+            <svg viewBox="0 0 220 120" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g12" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#ffc107"/>
+                        <stop offset="100%" stop-color="#ff8f00"/>
+                    </linearGradient>
+                </defs>
+                <ellipse cx="90" cy="60" rx="58" ry="32" fill="url(#g12)"/>
+                <g class="tail">
+                    <path d="M148 62 C 170 44, 182 28, 202 46 C 184 66, 168 88, 148 70 Z" fill="#ff9800" stroke="#e65100" stroke-width="0.9"/>
+                </g>
+                <circle cx="62" cy="50" r="6" fill="#fff" />
+                <circle cx="64" cy="50" r="3" fill="#2e1a00" />
+            </svg>
+            <div class="bubble tiny"></div>
+        </div>
+
+        <!-- Jellyfish -->
+        <div class="jellyfish-container">
+            <div class="jellyfish jellyfish-1">
+                <div class="jellyfish-body"></div>
+                <div class="jellyfish-tentacle tentacle-1"></div>
+                <div class="jellyfish-tentacle tentacle-2"></div>
+                <div class="jellyfish-tentacle tentacle-3"></div>
+                <div class="jellyfish-tentacle tentacle-4"></div>
+            </div>
+            <div class="jellyfish jellyfish-2">
+                <div class="jellyfish-body"></div>
+                <div class="jellyfish-tentacle tentacle-1"></div>
+                <div class="jellyfish-tentacle tentacle-2"></div>
+                <div class="jellyfish-tentacle tentacle-3"></div>
+                <div class="jellyfish-tentacle tentacle-4"></div>
+            </div>
+        </div>
+
+        <!-- Seaweed and Plants -->
+        <div class="seaweed-container">
+            <div class="seaweed seaweed-1">
+                <div class="seaweed-stem"></div>
+                <div class="seaweed-leaf leaf-1"></div>
+                <div class="seaweed-leaf leaf-2"></div>
+                <div class="seaweed-leaf leaf-3"></div>
+                <div class="seaweed-leaf leaf-4"></div>
+                <div class="seaweed-leaf leaf-5"></div>
+                <div class="seaweed-leaf leaf-6"></div>
+            </div>
+            <div class="seaweed seaweed-2">
+                <div class="seaweed-stem"></div>
+                <div class="seaweed-leaf leaf-1"></div>
+                <div class="seaweed-leaf leaf-2"></div>
+                <div class="seaweed-leaf leaf-3"></div>
+                <div class="seaweed-leaf leaf-4"></div>
+                <div class="seaweed-leaf leaf-5"></div>
+                <div class="seaweed-leaf leaf-6"></div>
+            </div>
+            <div class="seaweed seaweed-3">
+                <div class="seaweed-stem"></div>
+                <div class="seaweed-leaf leaf-1"></div>
+                <div class="seaweed-leaf leaf-2"></div>
+                <div class="seaweed-leaf leaf-3"></div>
+                <div class="seaweed-leaf leaf-4"></div>
+                <div class="seaweed-leaf leaf-5"></div>
+                <div class="seaweed-leaf leaf-6"></div>
+            </div>
+            <div class="seaweed seaweed-4">
+                <div class="seaweed-stem"></div>
+                <div class="seaweed-leaf leaf-1"></div>
+                <div class="seaweed-leaf leaf-2"></div>
+                <div class="seaweed-leaf leaf-3"></div>
+                <div class="seaweed-leaf leaf-4"></div>
+                <div class="seaweed-leaf leaf-5"></div>
+                <div class="seaweed-leaf leaf-6"></div>
+            </div>
+        </div>
+
+        <!-- Beautiful Coral Reef -->
+        <div class="coral-reef-container">
+            <div class="coral-reef coral-reef-1">
+                <div class="coral-branch branch-1"></div>
+                <div class="coral-branch branch-2"></div>
+                <div class="coral-branch branch-3"></div>
+                <div class="coral-branch branch-4"></div>
+                <div class="coral-branch branch-5"></div>
+            </div>
+            <div class="coral-reef coral-reef-2">
+                <div class="coral-branch branch-1"></div>
+                <div class="coral-branch branch-2"></div>
+                <div class="coral-branch branch-3"></div>
+                <div class="coral-branch branch-4"></div>
+            </div>
+            <div class="coral-reef coral-reef-3">
+                <div class="coral-branch branch-1"></div>
+                <div class="coral-branch branch-2"></div>
+                <div class="coral-branch branch-3"></div>
+                <div class="coral-branch branch-4"></div>
+                <div class="coral-branch branch-5"></div>
+                <div class="coral-branch branch-6"></div>
+            </div>
+        </div>
+
+        <!-- Sea Grass -->
+        <div class="seagrass-container">
+            <div class="seagrass seagrass-1"></div>
+            <div class="seagrass seagrass-2"></div>
+            <div class="seagrass seagrass-3"></div>
+            <div class="seagrass seagrass-4"></div>
+            <div class="seagrass seagrass-5"></div>
+            <div class="seagrass seagrass-6"></div>
+        </div>
+
+        <!-- Coral Reef -->
+        <div class="coral-container">
+            <div class="coral coral-1">
+                <div class="coral-branch branch-1"></div>
+                <div class="coral-branch branch-2"></div>
+                <div class="coral-branch branch-3"></div>
+            </div>
+            <div class="coral coral-2">
+                <div class="coral-branch branch-1"></div>
+                <div class="coral-branch branch-2"></div>
+                <div class="coral-branch branch-3"></div>
+            </div>
+            <div class="coral coral-3">
+                <div class="coral-branch branch-1"></div>
+                <div class="coral-branch branch-2"></div>
+                <div class="coral-branch branch-3"></div>
+            </div>
+        </div>
+
+        <!-- Starfish -->
+        <div class="starfish-container">
+            <div class="starfish starfish-1"></div>
+            <div class="starfish starfish-2"></div>
+        </div>
+
+        <!-- Sea Anemones -->
+        <div class="anemone-container">
+            <div class="anemone anemone-1">
+                <div class="anemone-body"></div>
+                <div class="anemone-tentacle tentacle-1"></div>
+                <div class="anemone-tentacle tentacle-2"></div>
+                <div class="anemone-tentacle tentacle-3"></div>
+                <div class="anemone-tentacle tentacle-4"></div>
+                <div class="anemone-tentacle tentacle-5"></div>
+                <div class="anemone-tentacle tentacle-6"></div>
+            </div>
+            <div class="anemone anemone-2">
+                <div class="anemone-body"></div>
+                <div class="anemone-tentacle tentacle-1"></div>
+                <div class="anemone-tentacle tentacle-2"></div>
+                <div class="anemone-tentacle tentacle-3"></div>
+                <div class="anemone-tentacle tentacle-4"></div>
+                <div class="anemone-tentacle tentacle-5"></div>
+                <div class="anemone-tentacle tentacle-6"></div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div class="dashboard">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="header-content">
+                    <h1><i class="fas fa-water"></i> Underwater Ocean Monitoring</h1>
+                    <div class="status-indicators">
+                        <div class="status-item">
+                            <i class="fas fa-circle status-online"></i>
+                            <span>System Online</span>
+                        </div>
+                        <div class="status-item">
+                            <i class="fas fa-thermometer-half"></i>
+                            <span>Depth: 45m</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+
+            <!-- 3D Earth Globe Section -->
+            <section class="earth-globe-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-globe"></i> 3D Ocean Data Globe</h2>
+                    <p>Interactive 3D visualization of global ocean monitoring data</p>
+                </div>
+                
+                <div class="globe-container">
+                    <div id="earthGlobe" class="earth-globe"></div>
+                    <div class="globe-controls">
+                        <button id="toggleDataPoints" class="globe-btn active">
+                            <i class="fas fa-map-marker-alt"></i> Data Points
+                        </button>
+                        <button id="toggleTrajectories" class="globe-btn">
+                            <i class="fas fa-route"></i> Trajectories
+                        </button>
+                        <button id="toggleHeatmap" class="globe-btn">
+                            <i class="fas fa-fire"></i> Heat Map
+                        </button>
+                        <button id="resetGlobeView" class="globe-btn">
+                            <i class="fas fa-home"></i> Reset View
+                        </button>
+                        <button id="toggleAutoRotate" class="globe-btn">
+                            <i class="fas fa-sync-alt"></i> Auto Rotate
+                        </button>
+                    </div>
+                    <div class="globe-info-panel" id="globeInfoPanel">
+                        <div class="info-header">
+                            <h3>Ocean Data Details</h3>
+                            <button id="closeGlobeInfo" class="close-btn">&times;</button>
+                        </div>
+                        <div class="info-content" id="globeInfoContent">
+                            <p>Click on a data point to view detailed information.</p>
+                        </div>
+                    </div>
+                    <div class="globe-legend">
+                        <h4>Temperature Legend</h4>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #0066cc;"></div>
+                            <span>Cold (&lt; 15°C)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #4dabf7;"></div>
+                            <span>Cool (15-20°C)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #69db7c;"></div>
+                            <span>Moderate (20-25°C)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #ffd43b;"></div>
+                            <span>Warm (25-30°C)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #ff6b6b;"></div>
+                            <span>Hot (&gt; 30°C)</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Selection Interface -->
+            <section class="data-selection-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-database"></i> Ocean Data Selection Tool</h2>
+                    <p>Select and filter oceanographic data from the Euro-Argo network</p>
+                </div>
+                
+                <div class="selection-container">
+                    <!-- Parameter Selection -->
+                    <div class="selection-panel">
+                        <h3><i class="fas fa-sliders-h"></i> Data Parameters</h3>
+                        <div class="parameter-grid">
+                            <div class="parameter-group">
+                                <label>Physical Parameters</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" id="temp" checked> Temperature</label>
+                                    <label><input type="checkbox" id="salinity" checked> Salinity</label>
+                                    <label><input type="checkbox" id="pressure" checked> Pressure</label>
+                                    <label><input type="checkbox" id="density"> Density</label>
+                                </div>
+                            </div>
+                            <div class="parameter-group">
+                                <label>Biogeochemical Parameters</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" id="oxygen"> Dissolved Oxygen</label>
+                                    <label><input type="checkbox" id="ph"> pH</label>
+                                    <label><input type="checkbox" id="nitrate"> Nitrate</label>
+                                    <label><input type="checkbox" id="chlorophyll"> Chlorophyll</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Time Range Selection -->
+                    <div class="selection-panel">
+                        <h3><i class="fas fa-calendar-alt"></i> Time Range</h3>
+                        <div class="time-controls">
+                            <div class="time-input-group">
+                                <label for="startDate">Start Date</label>
+                                <input type="date" id="startDate" value="2023-01-01">
+                            </div>
+                            <div class="time-input-group">
+                                <label for="endDate">End Date</label>
+                                <input type="date" id="endDate" value="2024-01-01">
+                            </div>
+                            <div class="time-presets">
+                                <button class="preset-btn" data-days="7">Last 7 days</button>
+                                <button class="preset-btn" data-days="30">Last 30 days</button>
+                                <button class="preset-btn" data-days="90">Last 3 months</button>
+                                <button class="preset-btn" data-days="365">Last year</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Geographic Selection -->
+                    <div class="selection-panel">
+                        <h3><i class="fas fa-globe"></i> Geographic Area</h3>
+                        <div class="geo-controls">
+                            <div class="region-selector">
+                                <label for="regionSelect">Predefined Regions</label>
+                                <select id="regionSelect">
+                                    <option value="global">Global Ocean</option>
+                                    <option value="atlantic">North Atlantic</option>
+                                    <option value="pacific">North Pacific</option>
+                                    <option value="indian">Indian Ocean</option>
+                                    <option value="mediterranean">Mediterranean Sea</option>
+                                    <option value="arctic">Arctic Ocean</option>
+                                    <option value="southern">Southern Ocean</option>
+                                    <option value="custom">Custom Area</option>
+                                </select>
+                            </div>
+                            <div class="custom-bounds" id="customBounds" style="display: none;">
+                                <div class="bounds-grid">
+                                    <div class="bound-input">
+                                        <label for="northLat">North Latitude</label>
+                                        <input type="number" id="northLat" min="-90" max="90" step="0.1" value="90">
+                                    </div>
+                                    <div class="bound-input">
+                                        <label for="southLat">South Latitude</label>
+                                        <input type="number" id="southLat" min="-90" max="90" step="0.1" value="-90">
+                                    </div>
+                                    <div class="bound-input">
+                                        <label for="westLon">West Longitude</label>
+                                        <input type="number" id="westLon" min="-180" max="180" step="0.1" value="-180">
+                                    </div>
+                                    <div class="bound-input">
+                                        <label for="eastLon">East Longitude</label>
+                                        <input type="number" id="eastLon" min="-180" max="180" step="0.1" value="180">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Quality & Mission Type -->
+                    <div class="selection-panel">
+                        <h3><i class="fas fa-filter"></i> Data Quality & Mission</h3>
+                        <div class="quality-controls">
+                            <div class="quality-group">
+                                <label>Data Quality</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="quality" value="all" checked> All Data</label>
+                                    <label><input type="radio" name="quality" value="good"> Good Quality Only</label>
+                                    <label><input type="radio" name="quality" value="adjusted"> Adjusted Data</label>
+                                </div>
+                            </div>
+                            <div class="mission-group">
+                                <label>Mission Type</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" id="core" checked> Core Mission</label>
+                                    <label><input type="checkbox" id="bgc"> BGC Mission</label>
+                                    <label><input type="checkbox" id="deep"> Deep Mission</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Float Selection -->
+                    <div class="selection-panel">
+                        <h3><i class="fas fa-ship"></i> Float Selection</h3>
+                        <div class="float-controls">
+                            <div class="float-input-group">
+                                <label for="floatId">Specific Float ID (optional)</label>
+                                <input type="text" id="floatId" placeholder="e.g., 2902755">
+                            </div>
+                            <div class="float-filters">
+                                <div class="filter-input">
+                                    <label for="minDepth">Minimum Depth (m)</label>
+                                    <input type="number" id="minDepth" min="0" value="0">
+                                </div>
+                                <div class="filter-input">
+                                    <label for="maxDepth">Maximum Depth (m)</label>
+                                    <input type="number" id="maxDepth" min="0" value="2000">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="selection-actions">
+                    <button id="previewData" class="action-btn preview-btn">
+                        <i class="fas fa-eye"></i> Preview Data
+                    </button>
+                    <button id="searchData" class="action-btn search-btn">
+                        <i class="fas fa-search"></i> Search Data
+                    </button>
+                    <button id="downloadData" class="action-btn download-btn" disabled>
+                        <i class="fas fa-download"></i> Download Selected
+                    </button>
+                    <button id="resetSelection" class="action-btn reset-btn">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                </div>
+
+                <!-- Data Preview Panel -->
+                <div class="data-preview-panel" id="dataPreviewPanel" style="display: none;">
+                    <div class="preview-header">
+                        <h3><i class="fas fa-chart-line"></i> Data Preview</h3>
+                        <button id="closePreview" class="close-btn">&times;</button>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Total Profiles:</span>
+                                <span class="stat-value" id="totalProfiles">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Floats Found:</span>
+                                <span class="stat-value" id="totalFloats">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Data Points:</span>
+                                <span class="stat-value" id="totalPoints">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Date Range:</span>
+                                <span class="stat-value" id="dateRange">-</span>
+                            </div>
+                        </div>
+                        <div class="preview-chart" id="previewChart">
+                            <canvas id="dataPreviewCanvas" width="800" height="400"></canvas>
+                        </div>
+                        <div class="preview-table">
+                            <h4>Sample Data</h4>
+                            <div class="table-container">
+                                <table id="previewTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Float ID</th>
+                                            <th>Date</th>
+                                            <th>Latitude</th>
+                                            <th>Longitude</th>
+                                            <th>Depth (m)</th>
+                                            <th>Temperature (°C)</th>
+                                            <th>Salinity (PSU)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="previewTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Download Options Panel -->
+                <div class="download-panel" id="downloadPanel" style="display: none;">
+                    <div class="download-header">
+                        <h3><i class="fas fa-download"></i> Download Options</h3>
+                        <button id="closeDownload" class="close-btn">&times;</button>
+                    </div>
+                    <div class="download-content">
+                        <div class="format-selection">
+                            <h4>Select Format</h4>
+                            <div class="format-options">
+                                <label><input type="radio" name="format" value="csv" checked> CSV (Excel compatible)</label>
+                                <label><input type="radio" name="format" value="netcdf"> NetCDF (Argo format)</label>
+                                <label><input type="radio" name="format" value="json"> JSON (API format)</label>
+                            </div>
+                        </div>
+                        <div class="download-actions">
+                            <button id="confirmDownload" class="download-confirm-btn">
+                                <i class="fas fa-download"></i> Download Now
+                            </button>
+                            <div class="download-progress" id="downloadProgress" style="display: none;">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progressFill"></div>
+                                </div>
+                                <span class="progress-text" id="progressText">Preparing download...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Content Grid -->
+            <div class="content-grid">
+                <!-- Data Visualization Section -->
+                <section class="data-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-chart-line"></i> Ocean Data Analytics</h2>
+                    </div>
+                    
+                    <div class="charts-grid">
+                        <!-- Temperature Graph -->
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h3><i class="fas fa-thermometer-half"></i> Water Temperature</h3>
+                                <div class="chart-value">18.5°C</div>
+                            </div>
+                            <div class="chart-area" id="temperatureChart">
+                                <canvas id="tempCanvas" width="300" height="150"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Pressure Graph -->
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h3><i class="fas fa-tachometer-alt"></i> Water Pressure</h3>
+                                <div class="chart-value">4.5 atm</div>
+                            </div>
+                            <div class="chart-area" id="pressureChart">
+                                <canvas id="pressureCanvas" width="300" height="150"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Salinity Graph -->
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h3><i class="fas fa-tint"></i> Salinity Level</h3>
+                                <div class="chart-value">35.2 ppt</div>
+                            </div>
+                            <div class="chart-area" id="salinityChart">
+                                <canvas id="salinityCanvas" width="300" height="150"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Oxygen Level -->
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h3><i class="fas fa-lungs"></i> Oxygen Level</h3>
+                                <div class="chart-value">8.2 mg/L</div>
+                            </div>
+                            <div class="chart-area" id="oxygenChart">
+                                <canvas id="oxygenCanvas" width="300" height="150"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Chatbot Section -->
+                <section class="chatbot-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-robot"></i> Marine Biologist Assistant</h2>
+                    </div>
+                    
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message bot-message">
+                                <div class="message-avatar">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="message-content">
+                                    <p>Welcome to the underwater world! I'm your Marine Biologist Assistant. I can help you understand ocean data, identify marine life, and explain underwater phenomena. What would you like to explore today?</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input-container">
+                            <input type="text" id="chatInput" placeholder="Ask about marine life, ocean data, or underwater phenomena..." class="chat-input">
+                            <button id="sendButton" class="send-button">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Marine Life Statistics -->
+            <section class="marine-stats">
+                <div class="section-header">
+                    <h2><i class="fas fa-fish"></i> Marine Life Monitoring</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-fish"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Fish Count</h4>
+                            <div class="stat-value">247</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Visibility</h4>
+                            <div class="stat-value">15.2m</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-waves"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Current Speed</h4>
+                            <div class="stat-value">0.8 m/s</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Light Penetration</h4>
+                            <div class="stat-value">12.5m</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Floating Particles -->
+        <div class="particle-container">
+            <div class="particle particle-1"></div>
+            <div class="particle particle-2"></div>
+            <div class="particle particle-3"></div>
+            <div class="particle particle-4"></div>
+            <div class="particle particle-5"></div>
+            <div class="particle particle-6"></div>
+            <div class="particle particle-7"></div>
+            <div class="particle particle-8"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
